@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -55,6 +57,24 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
         mCreateAccountButton.setOnClickListener(this);
         mLogInLink.setOnClickListener(this);
+        mNicknameView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 0) {
+                    isNameAvailable(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void createAuthProgDialog() {
@@ -112,7 +132,10 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
         if (!isValidName(mNickname) || !isValidEmail(email) || !isValidPassword(password, passConf)) return;
 
-        if (!isNameAvailable(mNickname)) return;
+        if (mNicknameView.getError() != null) {
+            mNicknameView.requestFocus();
+            return;
+        }
 
         mAuthProgDialog.show();
 
