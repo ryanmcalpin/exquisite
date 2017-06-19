@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "788940749825",
+    "firebase_url": "https://exquisite-9f73b.firebaseio.com",
+    "project_id": "exquisite-9f73b",
+    "storage_bucket": "exquisite-9f73b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788940749825:android:7b0951612b57003f",
+        "android_client_info": {
+          "package_name": "com.epicodus.exquisite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "788940749825-6260i3k67cdkrkp4gm6evr46r6u5cm2c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.epicodus.exquisite",
+            "certificate_hash": "8b29c8f88f56f83d5cb1654709cdba0649632b00"
+          }
+        },
+        {
+          "client_id": "788940749825-htb8j7uc0b8fb34ttdr0qi6sfcmpjdtc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADlYpQ0O0-6tFqzSLuq_9F8AEKQAriW4I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "788940749825-htb8j7uc0b8fb34ttdr0qi6sfcmpjdtc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
