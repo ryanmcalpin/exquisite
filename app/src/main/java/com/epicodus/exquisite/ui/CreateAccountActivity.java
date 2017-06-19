@@ -20,8 +20,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,6 +42,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     private FirebaseAuth.AuthStateListener mAuthListener;
     private ProgressDialog mAuthProgDialog;
     private String mNickname;
+    private boolean mAvailable;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +112,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
         if (!isValidName(mNickname) || !isValidEmail(email) || !isValidPassword(password, passConf)) return;
 
+        if (!isNameAvailable(mNickname)) return;
+
         mAuthProgDialog.show();
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -118,21 +125,15 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                     Toast.makeText(CreateAccountActivity.this, "Cool", Toast.LENGTH_SHORT).show();
                     createFirebaseUserProfile(task.getResult().getUser());
 
-                    //return uid
-                    FirebaseUser user = task.getResult().getUser();
-                    String uid = user.getUid();
-
+                    String uid = task.getResult().getUser().getUid();
                     DatabaseReference nicknamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_NICKNAMES);
                     nicknamesRef.child(mNickname).setValue(uid);
-
 
                 } else {
                     Toast.makeText(CreateAccountActivity.this, "Oops", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
     }
 
     private boolean isValidEmail(String email) {
@@ -144,13 +145,35 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         return true;
     }
 
-    private boolean isValidName(String name) {
+    private boolean isValidName(final String name) {
         if (name.equals("")) {
             mNicknameView.setError("Enter your nickname");
             return false;
         }
-//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_NICKNAMES).child()
         return true;
+    }
+
+    private boolean isNameAvailable(final String name) {
+        DatabaseReference nicknamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_NICKNAMES);
+        nicknamesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(name)) {
+                    mNicknameView.setError("Nickname already taken");
+                    mNicknameView.requestFocus();
+                    mAvailable = false;
+                } else {
+                    mAvailable = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return mAvailable;
     }
 
     private boolean isValidPassword(String password, String confPass) {
