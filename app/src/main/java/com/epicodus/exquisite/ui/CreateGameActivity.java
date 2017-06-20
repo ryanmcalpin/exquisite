@@ -70,26 +70,19 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
             Matcher pMatch = punctuation.matcher(openingLine.substring(openingLine.length()-1));
             Matcher pMatchQ = punctuation.matcher(openingLine.substring(openingLine.length()-2, openingLine.length()-1));
             Matcher qMatch = endQuote.matcher(openingLine.substring(openingLine.length()-1));
-            if (qMatch.matches() && pMatchQ.matches()) {
-                Log.d("matches", "GOOD QUOTE");
-            } else if (pMatch.matches()){
-                Log.d("matches", "GOOD NON QUOTE");
-            } else if (qMatch.matches()) {
-                Log.d("matches", "BAD QUOTE");
-                openingLine = openingLine.substring(0, openingLine.length()-1) + "." + openingLine.substring(openingLine.length()-1);
-            } else {
-                Log.d("matches", "JUST BAD");
+            if (!qMatch.matches() && !pMatchQ.matches() && !pMatch.matches()) {
                 openingLine = openingLine.concat(".");
+            } else if (qMatch.matches() && !pMatchQ.matches()){
+                openingLine = openingLine.substring(0, openingLine.length()-1) + "." + openingLine.substring(openingLine.length()-1);
             }
-            Log.d("onClick: ", openingLine);
 
-//            Game newGame = new Game(openingLine, userUid, userName);
-//            DatabaseReference gamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(userUid);
-//            DatabaseReference pushRef = gamesRef.push();
-//            pushRef.setValue(newGame);
-//            Intent intent = new Intent(CreateGameActivity.this, InvitePlayerActivity.class);
-//            intent.putExtra("newGame", Parcels.wrap(newGame));
-//            startActivity(intent);
+            Game newGame = new Game(openingLine, userUid, userName);
+            DatabaseReference gamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(userUid);
+            DatabaseReference pushRef = gamesRef.push();
+            pushRef.setValue(newGame);
+            Intent intent = new Intent(CreateGameActivity.this, InvitePlayerActivity.class);
+            intent.putExtra("newGame", Parcels.wrap(newGame));
+            startActivity(intent);
         }
     }
 }
