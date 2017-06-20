@@ -18,10 +18,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class UserGamesActivity extends AppCompatActivity {
+public class InvitesActivity extends AppCompatActivity {
     @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
 
-    private DatabaseReference mGamesReference;
+    private DatabaseReference mInvitesReference;
     private FirebaseRecyclerAdapter mFirebaseAdapter;
 
     @Override
@@ -32,12 +32,12 @@ public class UserGamesActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
-        mGamesReference = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(uid);
+        mInvitesReference = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(uid);
         setUpFirebaseAdapter();
     }
 
     private void setUpFirebaseAdapter() {
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Game, FirebaseGameViewHolder>(Game.class, R.layout.game_list_item, FirebaseGameViewHolder.class, mGamesReference) {
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Game, FirebaseGameViewHolder>(Game.class, R.layout.game_list_item, FirebaseGameViewHolder.class, mInvitesReference) {
             @Override
             protected void populateViewHolder(FirebaseGameViewHolder viewHolder, Game model, int position) {
                 viewHolder.bindGame(model);
@@ -46,11 +46,5 @@ public class UserGamesActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mFirebaseAdapter);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mFirebaseAdapter.cleanup();
     }
 }

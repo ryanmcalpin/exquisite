@@ -20,7 +20,8 @@
         <activity android:name=".ui.CreateGameActivity" />
         <activity android:name=".ui.LogInActivity" />
         <activity android:name=".ui.InvitePlayerActivity" />
-        <activity android:name=".ui.UserGamesActivity"></activity>
+        <activity android:name=".ui.UserGamesActivity" />
+        <activity android:name=".ui.InvitesActivity"></activity>
     </application>
 
 </manifest>
