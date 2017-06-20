@@ -47,7 +47,7 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if (v == mCreateGameButton) {
             String openingLine = mOpeningLineView.getText().toString();
-            if (openingLine.trim().equals("")) {
+            if (openingLine.trim().equals("") || openingLine.trim().length()<3) {
                 mOpeningLineView.setError("Enter the first line of the story");
                 return;
             }
