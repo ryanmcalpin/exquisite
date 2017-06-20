@@ -35,12 +35,15 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder implements V
         TextView statusView = (TextView) mView.findViewById(R.id.statusView);
 
         openingLineView.setText(game.getOpeningLine());
+
         if (game.getCollaboratorName() == null) {
             statusView.setText("Pending invitation...");
         } else if (game.getCollaboratorSentences().size() < game.getOwnerSentences().size()) {
-            statusView.setText("Waiting for " + game.getCollaboratorName());
-        } else {
-            statusView.setText("Your turn!");
+            if (mUser.getDisplayName().equals(game.getOwnerName())) {
+                statusView.setText("Waiting for " + game.getCollaboratorName());
+            } else {
+                statusView.setText("Your turn!");
+            }
         }
     }
 
