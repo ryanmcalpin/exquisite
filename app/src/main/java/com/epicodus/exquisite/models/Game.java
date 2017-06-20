@@ -14,6 +14,7 @@ public class Game {
     String collaboratorName;
     List<String> ownerSentences = new ArrayList<>();
     List<String> collaboratorSentences = new ArrayList<>();
+    String firebaseKey;
 
     public Game() {}
 
@@ -78,5 +79,13 @@ public class Game {
 
     public void setCollaboratorSentences(List<String> collaboratorSentences) {
         this.collaboratorSentences = collaboratorSentences;
+    }
+
+    public String getFirebaseKey() {
+        return firebaseKey;
+    }
+
+    public void setFirebaseKey(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
     }
 }

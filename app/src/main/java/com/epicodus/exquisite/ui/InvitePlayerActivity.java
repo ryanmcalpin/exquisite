@@ -33,6 +33,7 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
 
     private Game mGame;
     private boolean mExists;
+    private String mInviteeUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,11 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
                 mFriendView.requestFocus();
                 return;
             }
+
+            DatabaseReference invitedGamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_INVITED_GAMES).child(mInviteeUid);
+            DatabaseReference pushRef = invitedGamesRef.child(mGame.getFirebaseKey());
+            pushRef.setValue(mGame);
+            Toast.makeText(this, "cool", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -101,6 +107,7 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
                     mExists = false;
                 } else {
                     mExists = true;
+                    mInviteeUid = dataSnapshot.child(name).getValue().toString();
                 }
             }
 

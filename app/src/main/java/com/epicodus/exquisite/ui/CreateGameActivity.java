@@ -79,6 +79,8 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
             Game newGame = new Game(openingLine, userUid, userName);
             DatabaseReference gamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(userUid);
             DatabaseReference pushRef = gamesRef.push();
+            String key = pushRef.getKey();
+            newGame.setFirebaseKey(key);
             pushRef.setValue(newGame);
             Intent intent = new Intent(CreateGameActivity.this, InvitePlayerActivity.class);
             intent.putExtra("newGame", Parcels.wrap(newGame));
