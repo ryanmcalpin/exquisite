@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.parceler.Parcels;
+
 public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder{
     View mView;
     Context mContext;
@@ -62,6 +64,7 @@ public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder{
                             DatabaseReference inviteRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(game.getCollaboratorUid()).child(game.getFirebaseKey());
                             inviteRef.removeValue();
                             Intent intent = new Intent(mContext, GameActivity.class);
+                            intent.putExtra("game", Parcels.wrap(game));
                             mContext.startActivity(intent);
                         }
                     }
