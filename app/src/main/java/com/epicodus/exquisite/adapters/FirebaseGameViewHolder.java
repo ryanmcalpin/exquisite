@@ -2,6 +2,7 @@ package com.epicodus.exquisite.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder implements V
     }
 
     public void bindGame(Game game) {
+        Log.d("bindGame: ", mContext.getPackageName());
         TextView openingLineView = (TextView) mView.findViewById(R.id.openingLineTextView);
         TextView statusView = (TextView) mView.findViewById(R.id.statusView);
 
