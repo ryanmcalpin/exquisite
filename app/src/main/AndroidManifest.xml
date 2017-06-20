@@ -21,7 +21,8 @@
         <activity android:name=".ui.LogInActivity" />
         <activity android:name=".ui.InvitePlayerActivity" />
         <activity android:name=".ui.UserGamesActivity" />
-        <activity android:name=".ui.InvitesActivity"></activity>
+        <activity android:name=".ui.InvitesActivity" />
+        <activity android:name=".ui.GameActivity"></activity>
     </application>
 
 </manifest>
