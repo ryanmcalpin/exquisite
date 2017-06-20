@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.epicodus.exquisite.Constants;
 import com.epicodus.exquisite.R;
@@ -21,6 +22,7 @@ import butterknife.ButterKnife;
 
 public class UserGamesActivity extends AppCompatActivity {
     @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
+    @Bind(R.id.listTitleView) TextView mTitleView;
 
     private DatabaseReference mGamesReference;
     private FirebaseRecyclerAdapter mFirebaseAdapter;
@@ -30,6 +32,8 @@ public class UserGamesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_games);
         ButterKnife.bind(this);
+
+        mTitleView.setText("My Games");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
