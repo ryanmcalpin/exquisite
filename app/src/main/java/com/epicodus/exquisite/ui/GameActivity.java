@@ -3,12 +3,15 @@ package com.epicodus.exquisite.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.epicodus.exquisite.R;
 import com.epicodus.exquisite.models.Game;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.parceler.Parcels;
 
@@ -25,6 +28,7 @@ public class GameActivity extends AppCompatActivity {
     @Bind(R.id.submitButton) Button mSubmitButton;
 
     private Game mGame;
+    private FirebaseUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         ButterKnife.bind(this);
 
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
         Intent intent = getIntent();
         mGame = Parcels.unwrap(intent.getParcelableExtra("game"));
 
@@ -49,5 +54,17 @@ public class GameActivity extends AppCompatActivity {
             story = story.concat(collaboratorSentences.get(i) + " ");
         }
         mStoryView.setText(story);
+
+        if (mGame.getCollaboratorSentences().size() < mGame.getOwnerSentences().size()) {
+            if (mUser.getDisplayName().equals(mGame.getOwnerName())) {
+                mNewSentenceView.setVisibility(View.GONE);
+                mSubmitButton.setVisibility(View.GONE);
+            }
+        } else {
+            if (mUser.getDisplayName().equals(mGame.getCollaboratorName())) {
+                mNewSentenceView.setVisibility(View.GONE);
+                mSubmitButton.setVisibility(View.GONE);
+            }
+        }
     }
 }

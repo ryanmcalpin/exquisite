@@ -47,6 +47,12 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder {
             } else {
                 statusView.setText("Your turn!");
             }
+        } else {
+            if (mUser.getDisplayName().equals(game.getCollaboratorName())) {
+                statusView.setText("Waiting for " + game.getCollaboratorName());
+            } else {
+                statusView.setText("Your turn!");
+            }
         }
 
         mView.setOnClickListener(new View.OnClickListener() {
