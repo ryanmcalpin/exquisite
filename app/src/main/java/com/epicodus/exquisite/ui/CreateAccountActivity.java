@@ -66,13 +66,23 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0) {
-                    isNameAvailable(s.toString());
+                    isNameAvailable(s.toString().trim());
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s.length() != 0) {
+                    isNameAvailable(s.toString().trim());
+                }
+            }
+        });
+        mNicknameView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (mNicknameView.length() != 0) {
+                    isNameAvailable(mNicknameView.getText().toString().trim());
+                }
             }
         });
     }
