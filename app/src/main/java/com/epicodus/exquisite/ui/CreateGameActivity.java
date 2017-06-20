@@ -55,12 +55,16 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
                 startActivity(intent);
                 return;
             }
+            while (openingLine.substring(0, 1).equals(" ")) {
+                openingLine = openingLine.substring(1);
+            }
+            while (openingLine.substring(openingLine.length()-1).equals(" ")) {
+                openingLine = openingLine.substring(0, openingLine.length()-1);
+            }
             Game newGame = new Game(openingLine, userUid, userName);
             DatabaseReference gamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(userUid);
             DatabaseReference pushRef = gamesRef.push();
-//            String pushId = pushRef.getKey();
             pushRef.setValue(newGame);
-//            gamesRef.setPushId(pushId, newGame);
             Intent intent = new Intent(CreateGameActivity.this, InvitePlayerActivity.class);
             intent.putExtra("newGame", Parcels.wrap(newGame));
             startActivity(intent);
