@@ -1,15 +1,61 @@
 package com.epicodus.exquisite.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.epicodus.exquisite.R;
+import com.epicodus.exquisite.models.Game;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class CreateGameActivity extends AppCompatActivity {
+import org.parceler.Parcels;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class CreateGameActivity extends AppCompatActivity implements View.OnClickListener {
+    @Bind(R.id.openingSentenceEditText) EditText mOpeningLineView;
+    @Bind(R.id.createGameButton) Button mCreateGameButton;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_game);
+        ButterKnife.bind(this);
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+
+        mCreateGameButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == mCreateGameButton) {
+            String openingLine = mOpeningLineView.getText().toString();
+            if (openingLine.trim().equals("")) {
+                mOpeningLineView.setError("Enter the first line of the story");
+                return;
+            }
+            String userUid = mUser.getUid();
+            String userName = mUser.getDisplayName();
+            if (userName == null || userUid == null) {
+                Intent intent = new Intent(CreateGameActivity.this, LogInActivity.class);
+                startActivity(intent);
+                return;
+            }
+            Game newGame = new Game(openingLine, userUid, userName);
+            Intent intent = new Intent(CreateGameActivity.this, InvitePlayerActivity.class);
+            intent.putExtra("newGame", Parcels.wrap(newGame));
+            startActivity(intent);
+        }
     }
 }
