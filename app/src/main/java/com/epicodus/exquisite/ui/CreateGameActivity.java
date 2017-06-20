@@ -8,10 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.epicodus.exquisite.Constants;
 import com.epicodus.exquisite.R;
 import com.epicodus.exquisite.models.Game;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
 
@@ -53,6 +56,11 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
                 return;
             }
             Game newGame = new Game(openingLine, userUid, userName);
+            DatabaseReference gamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(userUid);
+            DatabaseReference pushRef = gamesRef.push();
+//            String pushId = pushRef.getKey();
+            pushRef.setValue(newGame);
+//            gamesRef.setPushId(pushId, newGame);
             Intent intent = new Intent(CreateGameActivity.this, InvitePlayerActivity.class);
             intent.putExtra("newGame", Parcels.wrap(newGame));
             startActivity(intent);
