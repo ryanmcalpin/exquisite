@@ -87,7 +87,8 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
             DatabaseReference invitedGamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_INVITED_GAMES).child(mInviteeUid);
             DatabaseReference pushRef = invitedGamesRef.child(mGame.getFirebaseKey());
             pushRef.setValue(mGame);
-            Toast.makeText(this, "cool", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(InvitePlayerActivity.this, UserGamesActivity.class);
+            startActivity(intent);
         }
     }
 

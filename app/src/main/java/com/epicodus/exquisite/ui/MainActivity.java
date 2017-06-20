@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.newGameButton) Button mNewGameButton;
     @Bind(R.id.logOutLink) TextView mLogOutLink;
     @Bind(R.id.welcomeView) TextView mWelcomeView;
+    @Bind(R.id.myGamesButton) Button mMyGamesButton;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mNewGameButton.setOnClickListener(this);
         mLogOutLink.setOnClickListener(this);
+        mMyGamesButton.setOnClickListener(this);
     }
 
     @Override
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (v == mLogOutLink) {
             logout();
+        }
+        if (v == mMyGamesButton) {
+            Intent intent = new Intent(MainActivity.this, UserGamesActivity.class);
+            startActivity(intent);
         }
     }
 
