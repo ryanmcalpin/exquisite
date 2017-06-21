@@ -85,11 +85,8 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
             }
 
             DatabaseReference collaboratorInvitesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(mInviteeUid);
-            DatabaseReference userInvitesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_INVITES).child(mGame.getOwnerUid());
             DatabaseReference pushRefCollab = collaboratorInvitesRef.child(mGame.getFirebaseKey());
-            DatabaseReference pushRefUser = userInvitesRef.child(mGame.getFirebaseKey());
             pushRefCollab.setValue(mGame);
-            pushRefUser.setValue(mGame);
             Intent intent = new Intent(InvitePlayerActivity.this, UserGamesActivity.class);
             startActivity(intent);
         }
