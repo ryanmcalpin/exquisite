@@ -56,12 +56,12 @@ public class GameActivity extends AppCompatActivity {
         mStoryView.setText(story);
 
         if (mGame.getCollaboratorSentences().size() < mGame.getOwnerSentences().size()) {
-            if (mUser.getDisplayName().equals(mGame.getOwnerName())) {
+            if (!mUser.getDisplayName().equals(mGame.getOwnerName())) {
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
             }
         } else {
-            if (mUser.getDisplayName().equals(mGame.getCollaboratorName())) {
+            if (!mUser.getDisplayName().equals(mGame.getCollaboratorName())) {
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
             }
