@@ -1,6 +1,7 @@
 package com.epicodus.exquisite.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -11,12 +12,15 @@ import android.widget.Toast;
 import com.epicodus.exquisite.Constants;
 import com.epicodus.exquisite.R;
 import com.epicodus.exquisite.models.Game;
+import com.epicodus.exquisite.ui.GameActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class FirebaseGameViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+import org.parceler.Parcels;
+
+public class FirebaseGameViewHolder extends RecyclerView.ViewHolder {
     View mView;
     Context mContext;
     FirebaseUser mUser;
@@ -25,7 +29,6 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder implements V
         super(itemView);
         mView = itemView;
         mContext = itemView.getContext();
-        itemView.setOnClickListener(this);
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
     }
@@ -44,11 +47,21 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder implements V
             } else {
                 statusView.setText("Your turn!");
             }
+        } else {
+            if (mUser.getDisplayName().equals(game.getCollaboratorName())) {
+                statusView.setText("Waiting for " + game.getCollaboratorName());
+            } else {
+                statusView.setText("Your turn!");
+            }
         }
-    }
 
-    @Override
-    public void onClick(View v) {
-        Toast.makeText(mContext, "", Toast.LENGTH_SHORT).show();
+        mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, GameActivity.class);
+                intent.putExtra("game", Parcels.wrap(game));
+                mContext.startActivity(intent);
+            }
+        });
     }
 }
