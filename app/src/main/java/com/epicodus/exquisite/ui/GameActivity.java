@@ -1,13 +1,17 @@
 package com.epicodus.exquisite.ui;
 
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.epicodus.exquisite.Constants;
@@ -35,6 +39,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.storyTextView) TextView mStoryView;
     @Bind(R.id.newSentenceView) EditText mNewSentenceView;
     @Bind(R.id.submitButton) Button mSubmitButton;
+    @Bind(R.id.scrollView) ScrollView mScrollView;
 
     private Game mGame;
     private FirebaseUser mUser;
@@ -76,7 +81,35 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
+        scrollToBottom();
+        mNewSentenceView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                scrollToBottom();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         mSubmitButton.setOnClickListener(this);
+    }
+
+    private void scrollToBottom() {
+        new CountDownTimer(500, 20) {
+            public void onTick(long millisUntilFinished) {
+                mScrollView.fullScroll(View.FOCUS_DOWN);
+            }
+            public void onFinish() {
+            }
+        }.start();
     }
 
     @Override
