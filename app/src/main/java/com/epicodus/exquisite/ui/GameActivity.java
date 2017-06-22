@@ -65,17 +65,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (mUser.getUid().equals(mGame.getOwnerUid())) {
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
-                Log.d("OOH: ", "collabs turn, user is owner... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
-            } else {
-                Log.d("OOPS: ", "collabs turn, user is collaborator... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
             }
         } else {
             if (!mUser.getUid().equals(mGame.getOwnerUid())) {
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
-                Log.d("OOH: ", "owners turn, user is collab... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
-            } else {
-                Log.d("OOPS: ", "owners turn, user is owner... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
             }
         }
 
