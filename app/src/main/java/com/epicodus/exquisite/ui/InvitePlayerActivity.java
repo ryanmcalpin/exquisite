@@ -1,6 +1,8 @@
 package com.epicodus.exquisite.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,6 +17,8 @@ import android.widget.Toast;
 import com.epicodus.exquisite.Constants;
 import com.epicodus.exquisite.R;
 import com.epicodus.exquisite.models.Game;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +38,7 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
     private Game mGame;
     private boolean mExists;
     private String mInviteeUid;
+    private ProgressDialog mProgDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,8 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
         Intent intent = getIntent();
         mGame = Parcels.unwrap(intent.getParcelableExtra("newGame"));
         mOpeningLineView.setText(mGame.getOpeningLine());
+
+        createProgDialog();
 
         mInviteButton.setOnClickListener(this);
         mFriendView.addTextChangedListener(new TextWatcher() {
@@ -76,6 +83,13 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
+    private void createProgDialog() {
+        mProgDialog = new ProgressDialog(this);
+        mProgDialog.setTitle("Loading...");
+        mProgDialog.setMessage("Inviting friend...");
+        mProgDialog.setCancelable(false);
+    }
+
     @Override
     public void onClick(View v) {
         if (v == mInviteButton) {
@@ -83,12 +97,18 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
                 mFriendView.requestFocus();
                 return;
             }
-
+            mProgDialog.show();
             DatabaseReference collaboratorInvitesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(mInviteeUid);
             DatabaseReference pushRefCollab = collaboratorInvitesRef.child(mGame.getFirebaseKey());
-            pushRefCollab.setValue(mGame);
-            Intent intent = new Intent(InvitePlayerActivity.this, UserGamesActivity.class);
-            startActivity(intent);
+            pushRefCollab.setValue(mGame).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    mProgDialog.dismiss();
+                    Intent intent = new Intent(InvitePlayerActivity.this, UserGamesActivity.class);
+                    startActivity(intent);
+                }
+            });
+
         }
     }
 
