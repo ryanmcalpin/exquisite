@@ -1,6 +1,8 @@
 package com.epicodus.exquisite.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,8 @@ import android.widget.EditText;
 import com.epicodus.exquisite.Constants;
 import com.epicodus.exquisite.R;
 import com.epicodus.exquisite.models.Game;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +34,8 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
 
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private ProgressDialog mProgDialog;
+    private Game mGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,8 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+
+        createProgDialog();
 
         mCreateGameButton.setOnClickListener(this);
     }
@@ -58,6 +66,7 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
                 startActivity(intent);
                 return;
             }
+            mProgDialog.show();
             while (openingLine.substring(0, 1).equals(" ")) {
                 openingLine = openingLine.substring(1);
             }
@@ -76,15 +85,28 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
                 openingLine = openingLine.substring(0, openingLine.length()-1) + "." + openingLine.substring(openingLine.length()-1);
             }
 
-            Game newGame = new Game(openingLine, userUid, userName);
+            mGame = new Game(openingLine, userUid, userName);
             DatabaseReference gamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(userUid);
             DatabaseReference pushRef = gamesRef.push();
             String key = pushRef.getKey();
-            newGame.setFirebaseKey(key);
-            pushRef.setValue(newGame);
-            Intent intent = new Intent(CreateGameActivity.this, InvitePlayerActivity.class);
-            intent.putExtra("newGame", Parcels.wrap(newGame));
-            startActivity(intent);
+            mGame.setFirebaseKey(key);
+            pushRef.setValue(mGame).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    mProgDialog.dismiss();
+                    Intent intent = new Intent(CreateGameActivity.this, InvitePlayerActivity.class);
+                    intent.putExtra("newGame", Parcels.wrap(mGame));
+                    startActivity(intent);
+                }
+            });
+
         }
+    }
+
+    private void createProgDialog() {
+        mProgDialog = new ProgressDialog(this);
+        mProgDialog.setTitle("Loading...");
+        mProgDialog.setMessage("Creating story...");
+        mProgDialog.setCancelable(false);
     }
 }
