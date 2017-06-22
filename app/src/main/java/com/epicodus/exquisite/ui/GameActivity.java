@@ -57,7 +57,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (collaboratorSentences.size() < ownerSentences.size()) {
             collaboratorSentences.add("");
         }
-        String story = "";
+        String story = "    ";
         for (int i = 0; i < ownerSentences.size(); i++) {
             story = story.concat(ownerSentences.get(i) + " ");
             story = story.concat(collaboratorSentences.get(i) + " ");
