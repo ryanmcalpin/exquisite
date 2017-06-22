@@ -37,17 +37,10 @@ public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder{
 
     public void bindGame(final Game game) {
         TextView openingLineView = (TextView) mView.findViewById(R.id.openingLineTextView);
-        TextView statusView = (TextView) mView.findViewById(R.id.statusView);
+//        TextView statusView = (TextView) mView.findViewById(R.id.statusView);
         Button acceptButton = (Button) mView.findViewById(R.id.acceptButton);
 
         openingLineView.setText(game.getOpeningLine());
-        if (game.getCollaboratorName() == null) {
-            statusView.setText("Pending invitation...");
-        } else if (game.getCollaboratorSentences().size() < game.getOwnerSentences().size()) {
-            statusView.setText("Waiting for " + game.getCollaboratorName());
-        } else {
-            statusView.setText("Your turn!");
-        }
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
