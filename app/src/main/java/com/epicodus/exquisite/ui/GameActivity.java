@@ -1,6 +1,7 @@
 package com.epicodus.exquisite.ui;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import com.epicodus.exquisite.Constants;
 import com.epicodus.exquisite.R;
 import com.epicodus.exquisite.models.Game;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -116,7 +119,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             DatabaseReference ownerGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(mGame.getOwnerUid()).child(mGame.getFirebaseKey());
             DatabaseReference collaboratorGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(mGame.getCollaboratorUid()).child(mGame.getFirebaseKey());
             ownerGameRef.setValue(mGame);
-            collaboratorGameRef.setValue(mGame);
+            collaboratorGameRef.setValue(mGame).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Intent intent = new Intent(GameActivity.this, GameActivity.class);
+                        intent.putExtra("game", Parcels.wrap(mGame));
+                        startActivity(intent);
+                    }
+                }
+            });
         }
     }
 }
