@@ -37,7 +37,7 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder {
         TextView openingLineView = (TextView) mView.findViewById(R.id.openingLineTextView);
         TextView statusView = (TextView) mView.findViewById(R.id.statusView);
 
-        openingLineView.setText(game.getOpeningLine());
+        openingLineView.setText("    " + game.getOpeningLine() + "..");
 
         if (game.getCollaboratorName() == null) {
             statusView.setText("Pending invitation...");

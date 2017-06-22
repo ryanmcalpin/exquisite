@@ -37,10 +37,9 @@ public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder{
 
     public void bindGame(final Game game) {
         TextView openingLineView = (TextView) mView.findViewById(R.id.openingLineTextView);
-//        TextView statusView = (TextView) mView.findViewById(R.id.statusView);
         Button acceptButton = (Button) mView.findViewById(R.id.acceptButton);
 
-        openingLineView.setText(game.getOpeningLine());
+        openingLineView.setText("    " + game.getOpeningLine());
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
