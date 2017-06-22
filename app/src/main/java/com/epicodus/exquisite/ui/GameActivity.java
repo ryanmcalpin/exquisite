@@ -3,24 +3,30 @@ package com.epicodus.exquisite.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.epicodus.exquisite.Constants;
 import com.epicodus.exquisite.R;
 import com.epicodus.exquisite.models.Game;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener {
     @Bind(R.id.ownerView) TextView mOwnerView;
     @Bind(R.id.collaboratorView) TextView mCollaboratorView;
     @Bind(R.id.storyTextView) TextView mStoryView;
@@ -55,16 +61,68 @@ public class GameActivity extends AppCompatActivity {
         }
         mStoryView.setText(story);
 
-        if (mGame.getCollaboratorSentences().size() < mGame.getOwnerSentences().size()) {
-            if (!mUser.getDisplayName().equals(mGame.getOwnerName())) {
+        if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size()-1).equals("")) {
+            if (mUser.getUid().equals(mGame.getOwnerUid())) {
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
+                Log.d("OOH: ", "collabs turn, user is owner... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
+            } else {
+                Log.d("OOPS: ", "collabs turn, user is collaborator... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
             }
         } else {
-            if (!mUser.getDisplayName().equals(mGame.getCollaboratorName())) {
+            if (!mUser.getUid().equals(mGame.getOwnerUid())) {
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
+                Log.d("OOH: ", "owners turn, user is collab... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
+            } else {
+                Log.d("OOPS: ", "owners turn, user is owner... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
             }
+        }
+
+        mSubmitButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == mSubmitButton) {
+            String sentence = mNewSentenceView.getText().toString();
+            if (sentence.trim().length() < 2) {
+                mNewSentenceView.setError("Enter the next line of the story");
+                return;
+            }
+            while (sentence.substring(0, 1).equals(" ")) {
+                sentence = sentence.substring(1);
+            }
+            while (sentence.substring(sentence.length()-1).equals(" ")) {
+                sentence = sentence.substring(0, sentence.length()-1);
+            }
+
+            Pattern punctuation = Pattern.compile("[.?!]");
+            Pattern endQuote = Pattern.compile("[\"\']");
+            Matcher punctuationAsLast = punctuation.matcher(sentence.substring(sentence.length()-1));
+            Matcher punctuationSecondToLast = punctuation.matcher(sentence.substring(sentence.length()-2, sentence.length()-1));
+            Matcher quoteAsLast = endQuote.matcher(sentence.substring(sentence.length()-1));
+            if (!quoteAsLast.matches() && !punctuationSecondToLast.matches() && !punctuationAsLast.matches()) {
+                sentence = sentence.concat(".");
+            } else if (quoteAsLast.matches() && !punctuationSecondToLast.matches()){
+                sentence = sentence.substring(0, sentence.length()-1) + "." + sentence.substring(sentence.length()-1);
+            }
+
+            ArrayList<String> userSentences;
+            if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size()-1).equals("")) {
+                userSentences = (ArrayList<String>) mGame.getCollaboratorSentences();
+                userSentences.set(userSentences.size()-1, sentence);
+                mGame.setCollaboratorSentences(userSentences);
+            } else {
+                userSentences = (ArrayList<String>) mGame.getOwnerSentences();
+                userSentences.add(sentence);
+                mGame.setOwnerSentences(userSentences);
+            }
+
+            DatabaseReference ownerGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(mGame.getOwnerUid()).child(mGame.getFirebaseKey());
+            DatabaseReference collaboratorGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(mGame.getCollaboratorUid()).child(mGame.getFirebaseKey());
+            ownerGameRef.setValue(mGame);
+            collaboratorGameRef.setValue(mGame);
         }
     }
 }

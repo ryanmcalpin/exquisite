@@ -47,7 +47,7 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if (v == mCreateGameButton) {
             String openingLine = mOpeningLineView.getText().toString();
-            if (openingLine.trim().equals("") || openingLine.trim().length()<3) {
+            if (openingLine.trim().length() < 2) {
                 mOpeningLineView.setError("Enter the first line of the story");
                 return;
             }
@@ -67,12 +67,12 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
 
             Pattern punctuation = Pattern.compile("[.?!]");
             Pattern endQuote = Pattern.compile("[\"\']");
-            Matcher pMatch = punctuation.matcher(openingLine.substring(openingLine.length()-1));
-            Matcher pMatchQ = punctuation.matcher(openingLine.substring(openingLine.length()-2, openingLine.length()-1));
-            Matcher qMatch = endQuote.matcher(openingLine.substring(openingLine.length()-1));
-            if (!qMatch.matches() && !pMatchQ.matches() && !pMatch.matches()) {
+            Matcher punctuationAsLast = punctuation.matcher(openingLine.substring(openingLine.length()-1));
+            Matcher punctuationSecondToLast = punctuation.matcher(openingLine.substring(openingLine.length()-2, openingLine.length()-1));
+            Matcher quoteAsLast = endQuote.matcher(openingLine.substring(openingLine.length()-1));
+            if (!quoteAsLast.matches() && !punctuationSecondToLast.matches() && !punctuationAsLast.matches()) {
                 openingLine = openingLine.concat(".");
-            } else if (qMatch.matches() && !pMatchQ.matches()){
+            } else if (quoteAsLast.matches() && !punctuationSecondToLast.matches()){
                 openingLine = openingLine.substring(0, openingLine.length()-1) + "." + openingLine.substring(openingLine.length()-1);
             }
 
