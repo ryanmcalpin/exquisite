@@ -131,4 +131,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(GameActivity.this, UserGamesActivity.class);
+        startActivity(intent);
+    }
 }
