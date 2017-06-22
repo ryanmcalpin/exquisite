@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.newSentenceView) EditText mNewSentenceView;
     @Bind(R.id.submitButton) Button mSubmitButton;
     @Bind(R.id.scrollView) ScrollView mScrollView;
+    @Bind(R.id.checkBox) CheckBox mAddParagraphCheckBox;
 
     private Game mGame;
     private FirebaseUser mUser;
@@ -73,11 +75,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (mUser.getUid().equals(mGame.getOwnerUid())) {
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
+                mAddParagraphCheckBox.setVisibility(View.GONE);
             }
         } else {
             if (!mUser.getUid().equals(mGame.getOwnerUid())) {
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
+                mAddParagraphCheckBox.setVisibility(View.GONE);
             }
         }
 
@@ -136,6 +140,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 sentence = sentence.concat(".");
             } else if (quoteAsLast.matches() && !punctuationSecondToLast.matches()){
                 sentence = sentence.substring(0, sentence.length()-1) + "." + sentence.substring(sentence.length()-1);
+            }
+            if (mAddParagraphCheckBox.isChecked()) {
+                sentence = "\n    " + sentence;
             }
 
             ArrayList<String> userSentences;
