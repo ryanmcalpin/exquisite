@@ -45,7 +45,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         Intent intent = getIntent();
         mGame = Parcels.unwrap(intent.getParcelableExtra("game"));
-        Log.d("LOGADOG1: ", mGame.getCollaboratorSentences().size() + "");
 
         mOwnerView.setText("Game owner: " + mGame.getOwnerName());
         mCollaboratorView.setText("Collaborator: " + mGame.getCollaboratorName());
@@ -55,7 +54,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (collaboratorSentences.size() < ownerSentences.size()) {
             collaboratorSentences.add("");
         }
-        Log.d("LOGADOG2: ", mGame.getCollaboratorSentences().size() + "");
         String story = "";
         for (int i = 0; i < ownerSentences.size(); i++) {
             story = story.concat(ownerSentences.get(i) + " ");
@@ -63,15 +61,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
         mStoryView.setText(story);
 
-        if (mGame.getCollaboratorSentences().size() < mGame.getOwnerSentences().size()) {
-            if (!mUser.getDisplayName().equals(mGame.getOwnerName())) {
+        if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size()-1).equals("")) {
+            if (mUser.getUid().equals(mGame.getOwnerUid())) {
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
+                Log.d("OOH: ", "collabs turn, user is owner... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
+            } else {
+                Log.d("OOPS: ", "collabs turn, user is collaborator... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
             }
         } else {
-            if (!mUser.getDisplayName().equals(mGame.getCollaboratorName())) {
+            if (!mUser.getUid().equals(mGame.getOwnerUid())) {
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
+                Log.d("OOH: ", "owners turn, user is collab... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
+            } else {
+                Log.d("OOPS: ", "owners turn, user is owner... collabSize: " + mGame.getCollaboratorSentences().size() + ", ownerSizer: " + mGame.getOwnerSentences().size());
             }
         }
 
@@ -105,11 +109,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             ArrayList<String> userSentences;
-            if (mGame.getCollaboratorSentences().size() < mGame.getOwnerSentences().size()) {
+            if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size()-1).equals("")) {
                 userSentences = (ArrayList<String>) mGame.getCollaboratorSentences();
-                Log.d("LOGADOG: ", mGame.getCollaboratorSentences().size() + "");
-                userSentences.add(sentence);
-                Log.d("LOGADOG: ", mGame.getCollaboratorSentences().size() + "");
+                userSentences.set(userSentences.size()-1, sentence);
                 mGame.setCollaboratorSentences(userSentences);
             } else {
                 userSentences = (ArrayList<String>) mGame.getOwnerSentences();
