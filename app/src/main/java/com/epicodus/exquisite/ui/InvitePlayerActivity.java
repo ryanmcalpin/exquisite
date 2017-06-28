@@ -100,6 +100,7 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
             mProgDialog.show();
             DatabaseReference collaboratorInvitesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(mInviteeUid);
             DatabaseReference pushRefCollab = collaboratorInvitesRef.child(mGame.getFirebaseKey());
+            mGame.setCollaboratorName(""); //indicates a pending invite
             pushRefCollab.setValue(mGame).addOnCompleteListener(this, new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {

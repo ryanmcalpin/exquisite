@@ -76,7 +76,8 @@ public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder{
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-
+                            DatabaseReference ownerGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(game.getOwnerUid()).child(game.getFirebaseKey());
+                            ownerGameRef.child("collaboratorName").removeValue();
                         }
                     }
                 });

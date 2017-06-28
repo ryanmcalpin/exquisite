@@ -86,6 +86,7 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
             }
 
             mGame = new Game(openingLine, userUid, userName);
+            mGame.setCollaboratorName(" "); //indicates no invite
             DatabaseReference gamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(userUid);
             DatabaseReference pushRef = gamesRef.push();
             String key = pushRef.getKey();
