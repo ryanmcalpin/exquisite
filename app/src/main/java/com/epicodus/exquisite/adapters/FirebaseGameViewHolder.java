@@ -37,31 +37,32 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder {
     public void bindGame(final Game game) {
         TextView openingLineView = (TextView) mView.findViewById(R.id.openingLineTextView);
         final TextView statusView = (TextView) mView.findViewById(R.id.statusView);
+        String other = "";
 
         openingLineView.setText("    " + game.getOpeningLine() + "..");
 
         if (game.getCollaboratorName() == null) {
-            statusView.setText("Invitation declined");
+            statusView.setText("No Invitation");
         } else if (game.getCollaboratorUid() == null) {
-            statusView.setText("Pending invitation...");
-        } else if (game.getCollaboratorSentences().size() < game.getOwnerSentences().size()) { //collaborator's turn
+            statusView.setText("Pending invitation");
+        } else {
+
             if (mUser.getDisplayName().equals(game.getOwnerName())) {
-                statusView.setText("Waiting for " + game.getCollaboratorName() + "...");
+                other = game.getCollaboratorName();
             } else {
-                statusView.setText("Your turn!");
+                other = game.getOwnerName();
             }
-        } else {                                                                                //owner's turn
-            if (mUser.getDisplayName().equals(game.getCollaboratorName())) {
-                statusView.setText("Waiting for " + game.getOwnerName() + "...");
+
+            if (game.getCollaboratorSentences().size() < game.getOwnerSentences().size() && mUser.getDisplayName().equals(game.getOwnerName()) || game.getCollaboratorSentences().size() == game.getOwnerSentences().size() && mUser.getDisplayName().equals(game.getCollaboratorName())) {
+                statusView.setText(other + "'s turn");
             } else {
-                statusView.setText("Your turn!");
+                statusView.setText("Your turn");
             }
         }
-
         mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (statusView.getText().toString().equals("Invitation declined")) {
+                if (game.getCollaboratorName() == null) {
                     Intent intent = new Intent(mContext, InvitePlayerActivity.class);
                     intent.putExtra("game", Parcels.wrap(game));
                     mContext.startActivity(intent);
@@ -73,4 +74,5 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder {
             }
         });
     }
+
 }
