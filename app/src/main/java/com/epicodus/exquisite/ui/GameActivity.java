@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -42,6 +41,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.submitButton) Button mSubmitButton;
     @Bind(R.id.scrollView) ScrollView mScrollView;
     @Bind(R.id.checkBox) CheckBox mAddParagraphCheckBox;
+    @Bind(R.id.shareStory) Button mShareStoryButton;
 
     private Game mGame;
     private FirebaseUser mUser;
@@ -104,6 +104,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         mSubmitButton.setOnClickListener(this);
+        mShareStoryButton.setOnClickListener(this);
     }
 
     private void scrollToBottom() {
@@ -169,6 +170,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
             });
+        }
+
+        if (view == mShareStoryButton) {
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("text/plain");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {mUser.getEmail()}); // recipients
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "An Exquisite story for you!");
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "    " + mStoryView.getText().toString());
+            startActivity(emailIntent);
         }
     }
 
