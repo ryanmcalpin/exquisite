@@ -47,7 +47,7 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        mGame = Parcels.unwrap(intent.getParcelableExtra("newGame"));
+        mGame = Parcels.unwrap(intent.getParcelableExtra("game"));
         mOpeningLineView.setText(mGame.getOpeningLine());
 
         createProgDialog();
@@ -100,6 +100,8 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
             mProgDialog.show();
             DatabaseReference collaboratorInvitesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(mInviteeUid);
             DatabaseReference pushRefCollab = collaboratorInvitesRef.child(mGame.getFirebaseKey());
+            DatabaseReference ownerGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(mGame.getOwnerUid()).child(mGame.getFirebaseKey());
+            ownerGameRef.child("collaboratorName").setValue(mFriendView.getText().toString());
             pushRefCollab.setValue(mGame).addOnCompleteListener(this, new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {

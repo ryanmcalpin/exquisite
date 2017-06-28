@@ -13,6 +13,7 @@ import com.epicodus.exquisite.Constants;
 import com.epicodus.exquisite.R;
 import com.epicodus.exquisite.models.Game;
 import com.epicodus.exquisite.ui.GameActivity;
+import com.epicodus.exquisite.ui.InvitePlayerActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -35,19 +36,21 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder {
 
     public void bindGame(final Game game) {
         TextView openingLineView = (TextView) mView.findViewById(R.id.openingLineTextView);
-        TextView statusView = (TextView) mView.findViewById(R.id.statusView);
+        final TextView statusView = (TextView) mView.findViewById(R.id.statusView);
 
         openingLineView.setText("    " + game.getOpeningLine() + "..");
 
         if (game.getCollaboratorName() == null) {
+            statusView.setText("Invitation declined");
+        } else if (game.getCollaboratorUid() == null) {
             statusView.setText("Pending invitation...");
-        } else if (game.getCollaboratorSentences().size() < game.getOwnerSentences().size()) {
+        } else if (game.getCollaboratorSentences().size() < game.getOwnerSentences().size()) { //collaborator's turn
             if (mUser.getDisplayName().equals(game.getOwnerName())) {
                 statusView.setText("Waiting for " + game.getCollaboratorName() + "...");
             } else {
                 statusView.setText("Your turn!");
             }
-        } else {
+        } else {                                                                                //owner's turn
             if (mUser.getDisplayName().equals(game.getCollaboratorName())) {
                 statusView.setText("Waiting for " + game.getOwnerName() + "...");
             } else {
@@ -58,9 +61,15 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder {
         mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, GameActivity.class);
-                intent.putExtra("game", Parcels.wrap(game));
-                mContext.startActivity(intent);
+                if (statusView.getText().toString().equals("Invitation declined")) {
+                    Intent intent = new Intent(mContext, InvitePlayerActivity.class);
+                    intent.putExtra("game", Parcels.wrap(game));
+                    mContext.startActivity(intent);
+                } else {
+                    Intent intent = new Intent(mContext, GameActivity.class);
+                    intent.putExtra("game", Parcels.wrap(game));
+                    mContext.startActivity(intent);
+                }
             }
         });
     }
