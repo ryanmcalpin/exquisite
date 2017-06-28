@@ -38,10 +38,11 @@ public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder{
     public void bindGame(final Game game) {
         TextView openingLineView = (TextView) mView.findViewById(R.id.openingLineTextView);
         Button acceptButton = (Button) mView.findViewById(R.id.acceptButton);
+        Button declineButton = (Button) mView.findViewById(R.id.declineButton);
         TextView inviterView = (TextView) mView.findViewById(R.id.inviterView);
 
-        openingLineView.setText("    " + game.getOpeningLine());
-        inviterView.setText("From " + game.getOwnerName() + ":");
+        openingLineView.setText("    \"" + game.getOpeningLine() + "\"");
+        inviterView.setText("-" + game.getOwnerName());
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +65,21 @@ public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder{
                     }
                 });
 
+            }
+        });
+
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference inviteeGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(mUser.getUid()).child(game.getFirebaseKey());
+                inviteeGameRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+
+                        }
+                    }
+                });
             }
         });
     }
