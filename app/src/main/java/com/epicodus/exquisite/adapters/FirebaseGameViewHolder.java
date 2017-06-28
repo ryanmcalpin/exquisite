@@ -41,7 +41,7 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder {
 
         if (game.getCollaboratorName() == null) {
             statusView.setText("Invitation declined");
-        } else if (game.getCollaboratorName().equals(" ")) {
+        } else if (game.getCollaboratorUid() == null) {
             statusView.setText("Pending invitation...");
         } else if (game.getCollaboratorSentences().size() < game.getOwnerSentences().size()) { //collaborator's turn
             if (mUser.getDisplayName().equals(game.getOwnerName())) {
