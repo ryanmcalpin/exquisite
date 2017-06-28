@@ -95,7 +95,7 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
                 public void onComplete(@NonNull Task<Void> task) {
                     mProgDialog.dismiss();
                     Intent intent = new Intent(CreateGameActivity.this, InvitePlayerActivity.class);
-                    intent.putExtra("newGame", Parcels.wrap(mGame));
+                    intent.putExtra("game", Parcels.wrap(mGame));
                     startActivity(intent);
                 }
             });
