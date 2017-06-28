@@ -18,7 +18,6 @@ Android/Firebase game inspired by Exquisite Corpse writing/drawing exercise. Two
 * Export stories and/or post them to facebook, twitter, etc.
 * Add option to view stories from all users
 * Allow rating stories by other users
-* Allow declining invitations
 * Allow users to befriend other users, or at least store past collaborators
 
 ## Legal
