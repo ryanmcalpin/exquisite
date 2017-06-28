@@ -2,13 +2,17 @@ package com.epicodus.exquisite.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,6 +31,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -39,13 +46,31 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
     private boolean mExists;
     private String mInviteeUid;
     private ProgressDialog mProgDialog;
+    private String[] mCollaborators;
+    private ArrayList<String> mSavedCollabs;
+
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_player);
         ButterKnife.bind(this);
+        
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = mSharedPreferences.edit();
 
+        mCollaborators = new String[] {};
+        mSavedCollabs = new ArrayList<String>();
+
+        if (mSharedPreferences.getString(Constants.PREFS_COLLABS_KEY, null) != null) {
+            mCollaborators = TextUtils.split(mSharedPreferences.getString(Constants.PREFS_COLLABS_KEY, null), " ");
+            mSavedCollabs = new ArrayList<String>(Arrays.asList(mCollaborators));
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mCollaborators);
+            mFriendView.setAdapter(adapter);
+        }
+        
         Intent intent = getIntent();
         mGame = Parcels.unwrap(intent.getParcelableExtra("game"));
         mOpeningLineView.setText(mGame.getOpeningLine());
@@ -56,7 +81,6 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
         mFriendView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -105,6 +129,12 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
             pushRefCollab.setValue(mGame).addOnCompleteListener(this, new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
+
+                    if (!mSavedCollabs.contains(mFriendView.getText().toString())) {
+                        mSavedCollabs.add(mFriendView.getText().toString());
+                        addToSharedPreferences(mSavedCollabs);
+                    }
+
                     mProgDialog.dismiss();
                     Intent intent = new Intent(InvitePlayerActivity.this, UserGamesActivity.class);
                     startActivity(intent);
@@ -112,6 +142,11 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
             });
 
         }
+    }
+
+    private void addToSharedPreferences(ArrayList<String> savedCollabs) {
+        String[] collabs = savedCollabs.toArray(new String[mSavedCollabs.size()]);
+        mEditor.putString(Constants.PREFS_COLLABS_KEY, TextUtils.join(" ", collabs)).apply();
     }
 
     private boolean doesPlayerExist(final String name) {

@@ -2,6 +2,8 @@ package com.epicodus.exquisite.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -22,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
 
-public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder{
+public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder {
     View mView;
     Context mContext;
     FirebaseUser mUser;
@@ -58,13 +60,13 @@ public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder{
                             collabGameRef.setValue(game);
                             DatabaseReference inviteRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(game.getCollaboratorUid()).child(game.getFirebaseKey());
                             inviteRef.removeValue();
+
                             Intent intent = new Intent(mContext, GameActivity.class);
                             intent.putExtra("game", Parcels.wrap(game));
                             mContext.startActivity(intent);
                         }
                     }
                 });
-
             }
         });
 
