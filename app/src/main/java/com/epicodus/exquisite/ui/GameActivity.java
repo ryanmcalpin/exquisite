@@ -1,13 +1,21 @@
 package com.epicodus.exquisite.ui;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.style.LeadingMarginSpan;
+import android.text.style.StrikethroughSpan;
+import android.text.style.StyleSpan;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -64,21 +72,36 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (collaboratorSentences.size() < ownerSentences.size()) {
             collaboratorSentences.add("");
         }
-        String story = "    ";
-        for (int i = 0; i < ownerSentences.size(); i++) {
-            story = story.concat(ownerSentences.get(i) + " ");
-            story = story.concat(collaboratorSentences.get(i) + " ");
-        }
-        mStoryView.setText(story);
 
-        if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size()-1).equals("")) {
-            if (mUser.getUid().equals(mGame.getOwnerUid())) {
+
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder("    ");
+
+        if (mGame.getOwnerUid().equals(mUser.getUid())) {
+            for (int i = 0; i < ownerSentences.size(); i++) {
+                int start = stringBuilder.length();
+                stringBuilder.append(ownerSentences.get(i) + " ");
+                stringBuilder.setSpan(new StyleSpan(Typeface.BOLD), start, stringBuilder.length() - 1, 0);
+                stringBuilder.append(collaboratorSentences.get(i) + " ");
+            }
+        } else {
+            for (int i = 0; i < ownerSentences.size(); i++) {
+                stringBuilder.append(ownerSentences.get(i) + " ");
+                int start = stringBuilder.length();
+                stringBuilder.append(collaboratorSentences.get(i) + " ");
+                stringBuilder.setSpan(new StyleSpan(Typeface.BOLD), start, stringBuilder.length() - 1, 0);
+            }
+        }
+
+        mStoryView.setText(stringBuilder);
+
+        if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size()-1).equals("")) { //if collaborator's turn
+            if (mUser.getUid().equals(mGame.getOwnerUid())) { //if user is owner
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
                 mAddParagraphCheckBox.setVisibility(View.GONE);
             }
-        } else {
-            if (!mUser.getUid().equals(mGame.getOwnerUid())) {
+        } else {                                              //if owner's turn
+            if (!mUser.getUid().equals(mGame.getOwnerUid())) { //if user is collaborator
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
                 mAddParagraphCheckBox.setVisibility(View.GONE);
