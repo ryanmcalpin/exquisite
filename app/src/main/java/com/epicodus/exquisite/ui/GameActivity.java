@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.epicodus.exquisite.Constants;
 import com.epicodus.exquisite.R;
@@ -42,17 +43,29 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
-    @Bind(R.id.ownerView) TextView mOwnerView;
-    @Bind(R.id.collaboratorView) TextView mCollaboratorView;
-    @Bind(R.id.storyTextView) TextView mStoryView;
-    @Bind(R.id.newSentenceView) EditText mNewSentenceView;
-    @Bind(R.id.submitButton) Button mSubmitButton;
-    @Bind(R.id.scrollView) ScrollView mScrollView;
-    @Bind(R.id.checkBox) CheckBox mAddParagraphCheckBox;
-    @Bind(R.id.shareStory) Button mShareStoryButton;
+    @Bind(R.id.ownerView)
+    TextView mOwnerView;
+    @Bind(R.id.collaboratorView)
+    TextView mCollaboratorView;
+    @Bind(R.id.storyTextView)
+    TextView mStoryView;
+    @Bind(R.id.newSentenceView)
+    EditText mNewSentenceView;
+    @Bind(R.id.submitButton)
+    Button mSubmitButton;
+    @Bind(R.id.scrollView)
+    ScrollView mScrollView;
+    @Bind(R.id.checkBox)
+    CheckBox mAddParagraphCheckBox;
+    @Bind(R.id.shareStory)
+    Button mShareStoryButton;
 
     private Game mGame;
     private FirebaseUser mUser;
+    private SpannableStringBuilder mStringBuilder;
+    private SpannableStringBuilder mStringBuilderOwner;
+    private SpannableStringBuilder mStringBuilderCollaborater;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,27 +87,34 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder("    ");
+        mStringBuilder = new SpannableStringBuilder("    ");
+        mStringBuilderOwner = new SpannableStringBuilder("    ");
+        mStringBuilderCollaborater = new SpannableStringBuilder("    ");
 
-        if (mGame.getOwnerUid().equals(mUser.getUid())) {
-            for (int i = 0; i < ownerSentences.size(); i++) {
-                int start = stringBuilder.length();
-                stringBuilder.append(ownerSentences.get(i) + " ");
-                stringBuilder.setSpan(new StyleSpan(Typeface.BOLD), start, stringBuilder.length() - 1, 0);
-                stringBuilder.append(collaboratorSentences.get(i) + " ");
-            }
-        } else {
-            for (int i = 0; i < ownerSentences.size(); i++) {
-                stringBuilder.append(ownerSentences.get(i) + " ");
-                int start = stringBuilder.length();
-                stringBuilder.append(collaboratorSentences.get(i) + " ");
-                stringBuilder.setSpan(new StyleSpan(Typeface.BOLD), start, stringBuilder.length() - 1, 0);
-            }
+
+        for (int i = 0; i < ownerSentences.size(); i++) {
+            int start = mStringBuilder.length();
+            mStringBuilder.append(ownerSentences.get(i) + " ");
+            mStringBuilder.append(collaboratorSentences.get(i) + " ");
+        }
+for (int i = 0; i < ownerSentences.size(); i++) {
+            int start = mStringBuilderOwner.length();
+            mStringBuilderOwner.append(ownerSentences.get(i) + " ");
+            mStringBuilderOwner.setSpan(new StyleSpan(Typeface.BOLD), start, mStringBuilderOwner.length() - 1, 0);
+            mStringBuilderOwner.append(collaboratorSentences.get(i) + " ");
         }
 
-        mStoryView.setText(stringBuilder);
+        for (int i = 0; i < ownerSentences.size(); i++) {
+            mStringBuilderCollaborater.append(ownerSentences.get(i) + " ");
+            int start = mStringBuilderCollaborater.length();
+            mStringBuilderCollaborater.append(collaboratorSentences.get(i) + " ");
+            mStringBuilderCollaborater.setSpan(new StyleSpan(Typeface.BOLD), start, mStringBuilderCollaborater.length() - 1, 0);
+        }
 
-        if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size()-1).equals("")) { //if collaborator's turn
+
+        mStoryView.setText(mStringBuilder);
+
+        if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size() - 1).equals("")) { //if collaborator's turn
             if (mUser.getUid().equals(mGame.getOwnerUid())) { //if user is owner
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
@@ -128,6 +148,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         mSubmitButton.setOnClickListener(this);
         mShareStoryButton.setOnClickListener(this);
+        mOwnerView.setOnClickListener(this);
+        mCollaboratorView.setOnClickListener(this);
     }
 
     private void scrollToBottom() {
@@ -135,6 +157,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             public void onTick(long millisUntilFinished) {
                 mScrollView.fullScroll(View.FOCUS_DOWN);
             }
+
             public void onFinish() {
             }
         }.start();
@@ -151,28 +174,28 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             while (sentence.substring(0, 1).equals(" ")) {
                 sentence = sentence.substring(1);
             }
-            while (sentence.substring(sentence.length()-1).equals(" ")) {
-                sentence = sentence.substring(0, sentence.length()-1);
+            while (sentence.substring(sentence.length() - 1).equals(" ")) {
+                sentence = sentence.substring(0, sentence.length() - 1);
             }
 
             Pattern punctuation = Pattern.compile("[.?!]");
             Pattern endQuote = Pattern.compile("[\"\']");
-            Matcher punctuationAsLast = punctuation.matcher(sentence.substring(sentence.length()-1));
-            Matcher punctuationSecondToLast = punctuation.matcher(sentence.substring(sentence.length()-2, sentence.length()-1));
-            Matcher quoteAsLast = endQuote.matcher(sentence.substring(sentence.length()-1));
+            Matcher punctuationAsLast = punctuation.matcher(sentence.substring(sentence.length() - 1));
+            Matcher punctuationSecondToLast = punctuation.matcher(sentence.substring(sentence.length() - 2, sentence.length() - 1));
+            Matcher quoteAsLast = endQuote.matcher(sentence.substring(sentence.length() - 1));
             if (!quoteAsLast.matches() && !punctuationSecondToLast.matches() && !punctuationAsLast.matches()) {
                 sentence = sentence.concat(".");
-            } else if (quoteAsLast.matches() && !punctuationSecondToLast.matches()){
-                sentence = sentence.substring(0, sentence.length()-1) + "." + sentence.substring(sentence.length()-1);
+            } else if (quoteAsLast.matches() && !punctuationSecondToLast.matches()) {
+                sentence = sentence.substring(0, sentence.length() - 1) + "." + sentence.substring(sentence.length() - 1);
             }
             if (mAddParagraphCheckBox.isChecked()) {
                 sentence = "\n    " + sentence;
             }
 
             ArrayList<String> userSentences;
-            if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size()-1).equals("")) {
+            if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size() - 1).equals("")) {
                 userSentences = (ArrayList<String>) mGame.getCollaboratorSentences();
-                userSentences.set(userSentences.size()-1, sentence);
+                userSentences.set(userSentences.size() - 1, sentence);
                 mGame.setCollaboratorSentences(userSentences);
             } else {
                 userSentences = (ArrayList<String>) mGame.getOwnerSentences();
@@ -198,10 +221,32 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (view == mShareStoryButton) {
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("text/plain");
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {mUser.getEmail()}); // recipients
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{mUser.getEmail()}); // recipients
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "An Exquisite story for you!");
             emailIntent.putExtra(Intent.EXTRA_TEXT, "    " + mStoryView.getText().toString());
             startActivity(emailIntent);
+        }
+
+        if (view == mOwnerView) {
+            if (mOwnerView.getTypeface() == null) {
+                mOwnerView.setTypeface(null, Typeface.BOLD);
+                mCollaboratorView.setTypeface(null, Typeface.NORMAL);
+                mStoryView.setText(mStringBuilderOwner);
+            } else {
+                mOwnerView.setTypeface(null, Typeface.NORMAL);
+                mStoryView.setText(mStringBuilder);
+            }
+        }
+
+        if (view == mCollaboratorView) {
+            if (mCollaboratorView.getTypeface() == null) {
+                mCollaboratorView.setTypeface(null, Typeface.BOLD);
+                mOwnerView.setTypeface(null, Typeface.NORMAL);
+                mStoryView.setText(mStringBuilderCollaborater);
+            } else {
+                mCollaboratorView.setTypeface(null, Typeface.NORMAL);
+                mStoryView.setText(mStringBuilder);
+            }
         }
     }
 
