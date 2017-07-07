@@ -58,7 +58,7 @@ public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder {
                         if (task.isSuccessful()) {
                             DatabaseReference collabGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(game.getCollaboratorUid()).child(game.getFirebaseKey());
                             collabGameRef.setValue(game);
-                            DatabaseReference inviteRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(game.getCollaboratorUid()).child(game.getFirebaseKey());
+                            DatabaseReference inviteRef = FirebaseDatabase.getInstance().getReference("Constants.FIREBASE_COLLABORATOR_INVITES").child(game.getCollaboratorUid()).child(game.getFirebaseKey());
                             inviteRef.removeValue();
 
                             Intent intent = new Intent(mContext, GameActivity.class);
@@ -73,7 +73,7 @@ public class FirebaseInviteViewHolder extends RecyclerView.ViewHolder {
         declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference inviteeGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(mUser.getUid()).child(game.getFirebaseKey());
+                DatabaseReference inviteeGameRef = FirebaseDatabase.getInstance().getReference("Constants.FIREBASE_COLLABORATOR_INVITES").child(mUser.getUid()).child(game.getFirebaseKey());
                 inviteeGameRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
