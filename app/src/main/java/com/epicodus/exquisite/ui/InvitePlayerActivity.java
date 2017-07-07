@@ -117,16 +117,13 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         if (v == mInviteButton) {
-            if (mFriendView.getError() != null) {
+            if (mFriendView.getError() != null) {//refactor
                 mFriendView.requestFocus();
                 return;
             }
             mProgDialog.show();
-            DatabaseReference collaboratorInvitesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(mInviteeUid);
-            DatabaseReference pushRefCollab = collaboratorInvitesRef.child(mGame.getFirebaseKey());
-            DatabaseReference ownerGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(mGame.getOwnerUid()).child(mGame.getFirebaseKey());
-            ownerGameRef.child("collaboratorName").setValue(mFriendView.getText().toString());
-            pushRefCollab.setValue(mGame).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            DatabaseReference invitesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_INVITES).child(mInviteeUid).child(mGame.getFirebaseKey());
+            invitesRef.setValue(true).addOnCompleteListener(this, new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
 

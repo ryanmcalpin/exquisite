@@ -59,14 +59,17 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
                 mOpeningLineView.setError("Enter the first line of the story");
                 return;
             }
+
             String userUid = mUser.getUid();
             String userName = mUser.getDisplayName();
-            if (userName == null || userUid == null) {
-                Intent intent = new Intent(CreateGameActivity.this, LogInActivity.class);
-                startActivity(intent);
-                return;
-            }
+//            if (userName == null || userUid == null) {
+//                Intent intent = new Intent(CreateGameActivity.this, LogInActivity.class);
+//                startActivity(intent);
+//                return;
+//            } //kind of unnecessary
+
             mProgDialog.show();
+
             while (openingLine.substring(0, 1).equals(" ")) {
                 openingLine = openingLine.substring(1);
             }
@@ -86,11 +89,15 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
             }
 
             mGame = new Game(openingLine, userUid, userName);
-            DatabaseReference gamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(userUid);
-            DatabaseReference pushRef = gamesRef.push();
-            String key = pushRef.getKey();
+
+            DatabaseReference gamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).push();
+            String key = gamesRef.getKey();
+
+            DatabaseReference userGamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_GAMES).child(userUid).child(key);
+            userGamesRef.setValue(true);
+
             mGame.setFirebaseKey(key);
-            pushRef.setValue(mGame).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            gamesRef.setValue(mGame).addOnCompleteListener(this, new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     mProgDialog.dismiss();
