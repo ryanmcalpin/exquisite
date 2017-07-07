@@ -138,6 +138,7 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
                     mProgDialog.dismiss();
                     Intent intent = new Intent(InvitePlayerActivity.this, UserGamesActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(0, 0);
                 }
             });
 
@@ -175,5 +176,14 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
             }
         });
         return mExists;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, UserGamesActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 }

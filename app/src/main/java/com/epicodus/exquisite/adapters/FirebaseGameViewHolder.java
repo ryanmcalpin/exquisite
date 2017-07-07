@@ -1,5 +1,6 @@
 package com.epicodus.exquisite.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import com.epicodus.exquisite.R;
 import com.epicodus.exquisite.models.Game;
 import com.epicodus.exquisite.ui.GameActivity;
 import com.epicodus.exquisite.ui.InvitePlayerActivity;
+import com.epicodus.exquisite.ui.UserGamesActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -71,8 +73,11 @@ public class FirebaseGameViewHolder extends RecyclerView.ViewHolder {
                     intent.putExtra("game", Parcels.wrap(game));
                     mContext.startActivity(intent);
                 }
+                Activity activity = (Activity) mContext;
+                activity.overridePendingTransition(0, 0);
             }
         });
     }
+
 
 }

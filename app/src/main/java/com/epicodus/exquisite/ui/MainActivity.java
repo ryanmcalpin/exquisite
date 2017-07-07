@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(MainActivity.this, InvitesActivity.class);
             startActivity(intent);
         }
+        overridePendingTransition(0, 0);
     }
 
     private void logout() {
