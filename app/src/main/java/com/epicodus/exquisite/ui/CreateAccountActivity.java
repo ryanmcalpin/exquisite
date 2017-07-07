@@ -103,6 +103,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                     Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                    overridePendingTransition(0, 0);
                     finish();
                 }
             }
@@ -131,6 +132,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         if (v == mLogInLink) {
             Intent intent = new Intent(CreateAccountActivity.this, LogInActivity.class);
             startActivity(intent);
+            overridePendingTransition(0, 0);
         }
     }
 
@@ -230,5 +232,10 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

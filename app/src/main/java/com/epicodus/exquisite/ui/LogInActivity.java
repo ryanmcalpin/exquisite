@@ -45,6 +45,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                     Intent intent = new Intent(LogInActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                    overridePendingTransition(0, 0);
                     finish();
                 }
             }
@@ -68,6 +69,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         if (v == mCreateAccountLink) {
             Intent intent = new Intent(LogInActivity.this, CreateAccountActivity.class);
             startActivity(intent);
+            overridePendingTransition(0, 0);
         }
         if (v == mLogInButton) {
             loginWithPassword();
@@ -109,5 +111,10 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

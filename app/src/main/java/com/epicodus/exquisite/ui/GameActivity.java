@@ -252,7 +252,10 @@ for (int i = 0; i < ownerSentences.size(); i++) {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(GameActivity.this, UserGamesActivity.class);
+        super.onBackPressed();
+        Intent intent = new Intent(this, UserGamesActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 }

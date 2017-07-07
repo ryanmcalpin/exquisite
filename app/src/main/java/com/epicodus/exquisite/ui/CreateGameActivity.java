@@ -97,6 +97,7 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
                     Intent intent = new Intent(CreateGameActivity.this, InvitePlayerActivity.class);
                     intent.putExtra("game", Parcels.wrap(mGame));
                     startActivity(intent);
+                    overridePendingTransition(0, 0);
                 }
             });
 
@@ -108,5 +109,14 @@ public class CreateGameActivity extends AppCompatActivity implements View.OnClic
         mProgDialog.setTitle("Loading...");
         mProgDialog.setMessage("Creating story...");
         mProgDialog.setCancelable(false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 }
