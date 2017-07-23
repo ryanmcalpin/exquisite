@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,72 +40,32 @@ import butterknife.ButterKnife;
 
 public class InvitePlayerActivity extends AppCompatActivity implements View.OnClickListener {
     @Bind(R.id.openingLineTextView) TextView mOpeningLineView;
-    @Bind(R.id.friendAutoComplete) AutoCompleteTextView mFriendView;
+    @Bind(R.id.friendAutoComplete) EditText mFriendView;
     @Bind(R.id.inviteButton) Button mInviteButton;
 
     private Game mGame;
-    private boolean mExists;
     private String mInviteeUid;
     private ProgressDialog mProgDialog;
-    private String[] mCollaborators;
-    private ArrayList<String> mSavedCollabs;
+    private String mFriendName;
+    private DatabaseReference mNicknamesRef;
 
-    private SharedPreferences mSharedPreferences;
-    private SharedPreferences.Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_player);
         ButterKnife.bind(this);
-        
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mEditor = mSharedPreferences.edit();
 
-        mCollaborators = new String[] {};
-        mSavedCollabs = new ArrayList<String>();
-
-        if (mSharedPreferences.getString(Constants.PREFS_COLLABS_KEY, null) != null) {
-            mCollaborators = TextUtils.split(mSharedPreferences.getString(Constants.PREFS_COLLABS_KEY, null), " ");
-            mSavedCollabs = new ArrayList<String>(Arrays.asList(mCollaborators));
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mCollaborators);
-            mFriendView.setAdapter(adapter);
-        }
-        
         Intent intent = getIntent();
         mGame = Parcels.unwrap(intent.getParcelableExtra("game"));
         mOpeningLineView.setText(mGame.getOpeningLine());
 
+        mNicknamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_NICKNAMES);
+
         createProgDialog();
 
         mInviteButton.setOnClickListener(this);
-        mFriendView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    doesPlayerExist(s.toString().trim());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() != 0) {
-                    doesPlayerExist(s.toString().trim());
-                }
-            }
-        });
-        mFriendView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (mFriendView.length() != 0) {
-                    doesPlayerExist(mFriendView.getText().toString().trim());
-                }
-            }
-        });
     }
 
     private void createProgDialog() {
@@ -117,65 +78,56 @@ public class InvitePlayerActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         if (v == mInviteButton) {
-            if (mFriendView.getError() != null) {
-                mFriendView.requestFocus();
-                return;
-            }
-            mProgDialog.show();
-            DatabaseReference collaboratorInvitesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(mInviteeUid);
-            DatabaseReference pushRefCollab = collaboratorInvitesRef.child(mGame.getFirebaseKey());
-            DatabaseReference ownerGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(mGame.getOwnerUid()).child(mGame.getFirebaseKey());
-            ownerGameRef.child("collaboratorName").setValue(mFriendView.getText().toString());
-            pushRefCollab.setValue(mGame).addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-
-                    if (!mSavedCollabs.contains(mFriendView.getText().toString())) {
-                        mSavedCollabs.add(mFriendView.getText().toString());
-                        addToSharedPreferences(mSavedCollabs);
-                    }
-
-                    mProgDialog.dismiss();
-                    Intent intent = new Intent(InvitePlayerActivity.this, UserGamesActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                }
-            });
-
+            validateFriend();
         }
     }
 
-    private void addToSharedPreferences(ArrayList<String> savedCollabs) {
-        String[] collabs = savedCollabs.toArray(new String[mSavedCollabs.size()]);
-        mEditor.putString(Constants.PREFS_COLLABS_KEY, TextUtils.join(" ", collabs)).apply();
-    }
+    private void validateFriend() {
+        mFriendName = mFriendView.getText().toString().trim();
+        if (mFriendName.equals("")) {
+            mFriendView.setError("Enter friend's nickname");
+            return;
+        }
 
-    private boolean doesPlayerExist(final String name) {
-        DatabaseReference nicknamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_NICKNAMES);
-        nicknamesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
+        mNicknamesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.hasChild(name)) {
+                if (!dataSnapshot.hasChild(mFriendName)) {
                     mFriendView.setError("No such player");
                     mFriendView.requestFocus();
-                    mExists = false;
-                } else if (name.equals(mGame.getOwnerName())) {
+
+                } else if (mFriendName.equals(mGame.getOwnerName())) {
                     mFriendView.setError("That's you!");
                     mFriendView.requestFocus();
-                    mExists = false;
+
                 } else {
-                    mExists = true;
-                    mInviteeUid = dataSnapshot.child(name).getValue().toString();
+                    mInviteeUid = dataSnapshot.child(mFriendName).getValue().toString();
+                    inviteFriend();
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
-        return mExists;
+    }
+
+    private void inviteFriend() {
+        mProgDialog.show();
+
+        DatabaseReference collaboratorInvitesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_COLLABORATOR_INVITES).child(mInviteeUid);
+        DatabaseReference pushRefCollab = collaboratorInvitesRef.child(mGame.getFirebaseKey());
+        DatabaseReference ownerGameRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_GAMES).child(mGame.getOwnerUid()).child(mGame.getFirebaseKey());
+        ownerGameRef.child("collaboratorName").setValue(mFriendView.getText().toString());
+
+        pushRefCollab.setValue(mGame).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                mProgDialog.dismiss();
+                Intent intent = new Intent(InvitePlayerActivity.this, UserGamesActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            }
+        });
     }
 
     @Override
