@@ -44,7 +44,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     private FirebaseAuth.AuthStateListener mAuthListener;
     private ProgressDialog mAuthProgDialog;
     private String mNickname;
-    private boolean mAvailable;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +98,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         if (v == mCreateAccountButton) {
-            createNewUser();
+            validateForm();
         }
         if (v == mLogInLink) {
             Intent intent = new Intent(CreateAccountActivity.this, LogInActivity.class);
@@ -108,14 +107,37 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void createNewUser() {
+    private void validateForm() {
         mNickname = mNicknameView.getText().toString().trim();
         final String email = mEmailView.getText().toString().trim();
         String password = mPasswordView.getText().toString().trim();
         String passConf = mPassConfView.getText().toString().trim();
 
-        if (!isValidName(mNickname) || !isValidEmail(email) || !isValidPassword(password, passConf) || !isNameAvailable(mNickname)) return;
+        if (!isValidName(mNickname) || !isValidEmail(email) || !isValidPassword(password, passConf)) return;
 
+        validateName(mNickname, email, password);
+    }
+
+    private void validateName(final String nickname, final String email, final String password) {
+        DatabaseReference nicknamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_NICKNAMES);
+        nicknamesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(nickname)) {
+                    mNicknameView.setError("Nickname already taken");
+                    mNicknameView.requestFocus();
+
+                } else {
+                    createAccount(email, password);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void createAccount(String email, String password) {
         mAuthProgDialog.show();
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -124,7 +146,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                 mAuthProgDialog.dismiss();
 
                 if (task.isSuccessful()) {
-                    Toast.makeText(CreateAccountActivity.this, "Cool", Toast.LENGTH_SHORT).show();
                     createFirebaseUserProfile(task.getResult().getUser());
 
                     String uid = task.getResult().getUser().getUid();
@@ -155,29 +176,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         return true;
     }
 
-    private boolean isNameAvailable(final String name) {
-        DatabaseReference nicknamesRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_NICKNAMES);
-        nicknamesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(name)) {
-                    mNicknameView.setError("Nickname already taken");
-                    mNicknameView.requestFocus();
-                    mAvailable = false;
-                } else {
-                    mAvailable = true;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return mAvailable;
-    }
-
     private boolean isValidPassword(String password, String confPass) {
         if (password.length() < 6) {
             mPasswordView.setError("Password must be at least 6 characters");
@@ -195,14 +193,12 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(CreateAccountActivity.this, user.getDisplayName(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CreateAccountActivity.this, user.getDisplayName(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
     @Override
     public void onBackPressed() {
-
     }
 }
