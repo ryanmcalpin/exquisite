@@ -14,6 +14,7 @@ Android/Firebase game inspired by Exquisite Corpse writing/drawing exercise. Two
 * Run the app with the emulator or your own device
 
 ## Improvements
+* Add confirmation dialogs when adding sentences, accepting/declining invitations, and exiting app
 * Email verification or create accounts by logging in with Google Play, facebook, etc.
 * Export stories and/or post them to facebook, twitter, etc.
 * Add option to view stories from all users
