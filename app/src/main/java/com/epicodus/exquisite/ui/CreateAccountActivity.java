@@ -57,34 +57,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
         mCreateAccountButton.setOnClickListener(this);
         mLogInLink.setOnClickListener(this);
-        mNicknameView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    isNameAvailable(s.toString().trim());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() != 0) {
-                    isNameAvailable(s.toString().trim());
-                }
-            }
-        });
-        mNicknameView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (mNicknameView.length() != 0) {
-                    isNameAvailable(mNicknameView.getText().toString().trim());
-                }
-            }
-        });
     }
 
     private void createAuthProgDialog() {
@@ -142,12 +114,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         String password = mPasswordView.getText().toString().trim();
         String passConf = mPassConfView.getText().toString().trim();
 
-        if (!isValidName(mNickname) || !isValidEmail(email) || !isValidPassword(password, passConf)) return;
-
-        if (mNicknameView.getError() != null) {
-            mNicknameView.requestFocus();
-            return;
-        }
+        if (!isValidName(mNickname) || !isValidEmail(email) || !isValidPassword(password, passConf) || !isNameAvailable(mNickname)) return;
 
         mAuthProgDialog.show();
 
