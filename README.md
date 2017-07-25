@@ -4,6 +4,15 @@ Ryan McAlpin, Epicodus 5/26/17
 ## Description
 Android/Firebase game inspired by Exquisite Corpse writing/drawing exercise. Two users take turn adding sentences to a collaborative story. Users must create an account with email. Users can create a game with an opening sentence and invite another user by entering their account's unique display name.
 
+|  |  | |
+| ------------- | ------------- | ------------- |
+| ![/../<screenshots>screenshot](screenshots/screenshot-home.png?raw=true "screenshot")   | ![/../<screenshots>screenshot](screenshots/screenshot-keyboard.png?raw=true "screenshot")  | ![/../<screenshots>screenshot](screenshots/screenshot-story.png?raw=true "screenshot") |
+
+
+
+
+
+
 ## Requirements
 * Android Studio 2.3.2 or newer
 * JDK 6 or higher
