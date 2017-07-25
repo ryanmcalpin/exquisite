@@ -7,7 +7,7 @@ Android/Firebase game inspired by Exquisite Corpse writing/drawing exercise. Two
 
 |  |  | |
 | ------------- | ------------- | ------------- |
-| ![/../<screenshots>/screenshot](screenshots/screenshot-home.png?raw=true "screenshot")   | ![/../<screenshots>/screenshot](screenshots/screenshot-keyboard.png?raw=true "screenshot")  | ![/../<screenshots>/screenshot](screenshots/screenshot-story.png?raw=true "screenshot") |
+| ![screenshot](/../screenshots/screenshots/screenshot-home.png?raw=true "screenshot")   | ![screenshot](/../screenshots/screenshots/screenshot-keyboard.png?raw=true "screenshot")  | ![screenshot](/../screenshots/screenshots/screenshot-story.png?raw=true "screenshot") |
 
 
 ## Requirements
