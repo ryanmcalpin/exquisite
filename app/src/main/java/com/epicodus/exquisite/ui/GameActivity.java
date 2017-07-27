@@ -77,6 +77,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = getIntent();
         mGame = Parcels.unwrap(intent.getParcelableExtra("game"));
 
+        mStoryView.setFocusable(true);
+        mStoryView.setFocusableInTouchMode(true);
+
         //user is owner?
         if (mGame.getOwnerUid().equals(mUser.getUid())) {
             mUserOwner = true;
@@ -154,8 +157,6 @@ for (int i = 0; i < ownerSentences.size(); i++) {
                 mSubmitButton.setVisibility(View.GONE);
                 mAddParagraphCheckBox.setVisibility(View.GONE);
 
-                mStoryView.setFocusable(true);
-                mStoryView.setFocusableInTouchMode(true);
                 mTitleView.setVisibility(View.GONE);
                 mTitleTextView.setVisibility(View.VISIBLE);
             }
@@ -165,8 +166,6 @@ for (int i = 0; i < ownerSentences.size(); i++) {
                 mSubmitButton.setVisibility(View.GONE);
                 mAddParagraphCheckBox.setVisibility(View.GONE);
 
-                mStoryView.setFocusable(true);
-                mStoryView.setFocusableInTouchMode(true);
                 mTitleView.setVisibility(View.GONE);
                 mTitleTextView.setVisibility(View.VISIBLE);
             }
@@ -210,6 +209,14 @@ for (int i = 0; i < ownerSentences.size(); i++) {
     @Override
     public void onClick(View view) {
         if (view == mSubmitButton) {
+            if (!mTitleView.getText().toString().equals("")) {
+                String title = mTitleView.getText().toString();
+                if (mUserOwner) {
+                    mGame.setOwnerTitle(title);
+                } else {
+                    mGame.setCollaboratorTitle(title);
+                }
+            }
             String sentence = mNewSentenceView.getText().toString();
             if (sentence.trim().length() < 2) {
                 mNewSentenceView.setError("Enter the next line of the story");
