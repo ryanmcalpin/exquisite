@@ -14,6 +14,8 @@ public class Game {
     String collaboratorName;
     List<String> ownerSentences = new ArrayList<>();
     List<String> collaboratorSentences = new ArrayList<>();
+    String ownerTitle;
+    String collaboratorTitle;
     String firebaseKey;
 
     public Game() {}
@@ -87,5 +89,21 @@ public class Game {
 
     public void setFirebaseKey(String firebaseKey) {
         this.firebaseKey = firebaseKey;
+    }
+
+    public String getOwnerTitle() {
+        return ownerTitle;
+    }
+
+    public void setOwnerTitle(String ownerTitle) {
+        this.ownerTitle = ownerTitle;
+    }
+
+    public String getCollaboratorTitle() {
+        return collaboratorTitle;
+    }
+
+    public void setCollaboratorTitle(String collaboratorTitle) {
+        this.collaboratorTitle = collaboratorTitle;
     }
 }

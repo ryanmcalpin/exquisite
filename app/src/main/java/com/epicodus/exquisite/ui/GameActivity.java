@@ -35,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -52,13 +53,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.scrollView) ScrollView mScrollView;
     @Bind(R.id.checkBox) CheckBox mAddParagraphCheckBox;
     @Bind(R.id.shareStory) AppCompatImageView mShareStoryButton;
+    @Bind(R.id.titleView) TextView mTitleView;
+    @Bind(R.id.alternateTitleView) TextView mAltTitleView;
+    @Bind(R.id.orView) TextView mOrView;
+    @Bind(R.id.titleTextView) TextView mTitleTextView;
+    @Bind(R.id.andView) TextView mAndView;
 
     private Game mGame;
     private FirebaseUser mUser;
     private SpannableStringBuilder mStringBuilder;
     private SpannableStringBuilder mStringBuilderOwner;
     private SpannableStringBuilder mStringBuilderCollaborater;
-
+    private boolean mUserOwner;
+    private boolean mUserTurn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +77,42 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = getIntent();
         mGame = Parcels.unwrap(intent.getParcelableExtra("game"));
 
-        mOwnerView.setText("Game owner: " + mGame.getOwnerName());
-        mCollaboratorView.setText("Collaborator: " + mGame.getCollaboratorName());
+        //user is owner?
+        if (mGame.getOwnerUid().equals(mUser.getUid())) {
+            mUserOwner = true;
+        } else {
+            mUserOwner = false;
+        }
+
+
+        if (mUserOwner) {
+            if (mGame.getOwnerTitle() != null) {
+                mTitleView.setText(mGame.getOwnerTitle());
+                mTitleTextView.setText(mGame.getOwnerTitle());
+            }
+            if (mGame.getCollaboratorTitle() != null) {
+                mAltTitleView.setText(mGame.getCollaboratorTitle());
+            } else {
+                mOrView.setVisibility(View.GONE);
+                mAltTitleView.setVisibility(View.GONE);
+            }
+        } else { //user is collaborator
+            if (mGame.getCollaboratorTitle() != null) {
+                mTitleView.setText(mGame.getCollaboratorTitle());
+                mTitleTextView.setText(mGame.getCollaboratorTitle());
+            }
+            if (mGame.getOwnerTitle() != null) {
+                mAltTitleView.setText(mGame.getOwnerTitle());
+            } else {
+                mOrView.setVisibility(View.GONE);
+                mAltTitleView.setVisibility(View.GONE);
+            }
+        }
+
+        mAndView.setText("&");
+
+        mOwnerView.setText(mGame.getOwnerName());
+        mCollaboratorView.setText(mGame.getCollaboratorName());
 
         ArrayList<String> ownerSentences = (ArrayList<String>) mGame.getOwnerSentences();
         ArrayList<String> collaboratorSentences = (ArrayList<String>) mGame.getCollaboratorSentences();
@@ -108,16 +149,26 @@ for (int i = 0; i < ownerSentences.size(); i++) {
         mStoryView.setText(mStringBuilder);
 
         if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size() - 1).equals("")) { //if collaborator's turn
-            if (mUser.getUid().equals(mGame.getOwnerUid())) { //if user is owner
+            if (mUserOwner) { //if user is owner
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
                 mAddParagraphCheckBox.setVisibility(View.GONE);
+
+                mStoryView.setFocusable(true);
+                mStoryView.setFocusableInTouchMode(true);
+                mTitleView.setVisibility(View.GONE);
+                mTitleTextView.setVisibility(View.VISIBLE);
             }
         } else {                                              //if owner's turn
-            if (!mUser.getUid().equals(mGame.getOwnerUid())) { //if user is collaborator
+            if (!mUserOwner) { //if user is collaborator
                 mNewSentenceView.setVisibility(View.GONE);
                 mSubmitButton.setVisibility(View.GONE);
                 mAddParagraphCheckBox.setVisibility(View.GONE);
+
+                mStoryView.setFocusable(true);
+                mStoryView.setFocusableInTouchMode(true);
+                mTitleView.setVisibility(View.GONE);
+                mTitleTextView.setVisibility(View.VISIBLE);
             }
         }
 
