@@ -20,57 +20,56 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="4dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="    &quot;This is the opening sentence, and it's totally fine.&quot;"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/acceptButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/declineButton"
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:id="@+id/inviterView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="0dp"
         android:text="-gameOwner"
-        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/acceptButton"
-        app:layout_constraintTop_toBottomOf="@+id/openingLineTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/openingLineTextView"
+        app:layout_constraintRight_toLeftOf="@+id/declineButton"
+        android:layout_marginRight="8dp" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/acceptButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="12dp"
         android:layout_marginTop="0dp"
         android:src="@drawable/ic_done_black_24dp"
         android:text="Y"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/declineButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.521"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/declineButton"
         android:src="@drawable/ic_clear_black_24dp"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
         android:text="N"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintRight_toLeftOf="@+id/acceptButton"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/view6"
+        app:layout_constraintHorizontal_bias="1.0" />
 
     <View
         android:id="@+id/view2"
@@ -86,7 +85,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inviterView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <View
