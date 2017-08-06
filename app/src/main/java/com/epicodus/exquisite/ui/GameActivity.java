@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -90,7 +91,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             mStringBuilder.append(ownerSentences.get(i) + " ");
             mStringBuilder.append(collaboratorSentences.get(i) + " ");
         }
-for (int i = 0; i < ownerSentences.size(); i++) {
+        for (int i = 0; i < ownerSentences.size(); i++) {
             int start = mStringBuilderOwner.length();
             mStringBuilderOwner.append(ownerSentences.get(i) + " ");
             mStringBuilderOwner.setSpan(new StyleSpan(Typeface.BOLD), start, mStringBuilderOwner.length() - 1, 0);
@@ -104,8 +105,11 @@ for (int i = 0; i < ownerSentences.size(); i++) {
             mStringBuilderCollaborater.setSpan(new StyleSpan(Typeface.BOLD), start, mStringBuilderCollaborater.length() - 1, 0);
         }
 
-
         mStoryView.setText(mStringBuilder);
+
+        mOwnerView.setTypeface(null, Typeface.NORMAL);
+        mCollaboratorView.setTypeface(null, Typeface.NORMAL);
+
 
         if (mGame.getCollaboratorSentences().get(mGame.getCollaboratorSentences().size() - 1).equals("")) { //if collaborator's turn
             if (mUser.getUid().equals(mGame.getOwnerUid())) { //if user is owner
