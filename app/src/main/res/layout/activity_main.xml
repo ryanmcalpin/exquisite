@@ -12,43 +12,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Exquisite"
-        android:textSize="56sp"
+        android:textSize="60sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.110000014" />
 
     <Button
         android:id="@+id/newGameButton"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:text="New Game"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="New Story"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/myGamesButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textSize="18sp"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
 
     <Button
         android:id="@+id/myGamesButton"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:text="My Games"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="My Stories"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/myInvitesButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textSize="18sp"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/logOutLink"
@@ -79,31 +80,32 @@
 
     <Button
         android:id="@+id/myInvitesButton"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:text="My Invites"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Invites"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textSize="18sp"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/newGameButton"
+        android:layout_marginBottom="36dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
         app:srcCompat="@drawable/icon"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toBottomOf="@+id/newGameButton" />
 
 </android.support.constraint.ConstraintLayout>
