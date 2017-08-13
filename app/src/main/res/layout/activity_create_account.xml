@@ -31,8 +31,7 @@
         android:inputType="textPersonName"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        android:textCursorDrawable="@null"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView2"/>
 
     <EditText
         android:id="@+id/emailEditText"
@@ -46,8 +45,7 @@
         android:inputType="textEmailAddress"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nickNameEditText"
-        android:textCursorDrawable="@null"/>
+        app:layout_constraintTop_toBottomOf="@+id/nickNameEditText"/>
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -61,8 +59,7 @@
         android:inputType="textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditText"
-        android:textCursorDrawable="@null"/>
+        app:layout_constraintTop_toBottomOf="@+id/emailEditText"/>
 
     <EditText
         android:id="@+id/passConfEditText"
@@ -76,8 +73,7 @@
         android:inputType="textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditText"
-        android:textCursorDrawable="@null"/>
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditText"/>
 
     <Button
         android:id="@+id/createAccountButton"

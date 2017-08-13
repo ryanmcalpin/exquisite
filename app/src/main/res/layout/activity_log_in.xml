@@ -31,8 +31,7 @@
         android:inputType="textEmailAddress"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        android:textCursorDrawable="@null"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView4"/>
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -46,8 +45,7 @@
         android:inputType="textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditText"
-        android:textCursorDrawable="@null" />
+        app:layout_constraintTop_toBottomOf="@+id/emailEditText"/>
 
     <Button
         android:id="@+id/logInButton"

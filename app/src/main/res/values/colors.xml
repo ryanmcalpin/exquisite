@@ -5,4 +5,6 @@
     <color name="colorAccent">#F2F0CC</color>
     <color name="bg">#fffeea</color>
     <color name="bgListItem">#F2F0CC</color>
+    <color name="textHighlight">#e2e1b1</color>
+    <color name="cursorHandles">#483b27</color>
 </resources>
