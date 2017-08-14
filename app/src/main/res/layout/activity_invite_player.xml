@@ -7,6 +7,20 @@
     android:background="@color/bg"
     tools:context="com.epicodus.exquisite.ui.InvitePlayerActivity">
 
+    <View
+        android:id="@+id/view10"
+        android:layout_width="419dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@color/bgListItem"
+        app:layout_constraintBottom_toTopOf="@+id/view9"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/openingLineTextView"
         android:layout_width="wrap_content"

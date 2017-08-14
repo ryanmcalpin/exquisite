@@ -40,7 +40,7 @@ public class InvitesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_games);
         ButterKnife.bind(this);
 
-        mTitleView.setText("My Invites");
+        mTitleView.setText("Invites");
 
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

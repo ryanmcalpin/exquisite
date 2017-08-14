@@ -43,7 +43,7 @@ public class UserGamesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_games);
         ButterKnife.bind(this);
 
-        mTitleView.setText("My Games");
+        mTitleView.setText("My Stories");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
