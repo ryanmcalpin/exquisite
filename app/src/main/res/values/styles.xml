@@ -4,10 +4,10 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/textHighlight</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorBlack</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/cursorHandles</item>
-        <item name="android:editTextColor">@color/cursorHandles</item>
+        <item name="android:textColor">@color/colorDarkBrown</item>
+        <item name="android:editTextColor">@color/colorBrown</item>
         <item name="android:textSelectHandle">@drawable/cursor_handles</item>
         <item name="android:textSelectHandleLeft">@drawable/cursor_handles</item>
         <item name="android:textSelectHandleRight">@drawable/cursor_handles</item>

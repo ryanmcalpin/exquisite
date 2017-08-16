@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#F2F0CC</color>
-    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorAccent">#F2F0CC</color>
     <color name="bg">#fffeea</color>
     <color name="bgListItem">#F2F0CC</color>
     <color name="textHighlight">#e2e1b1</color>
-    <color name="cursorHandles">#483b27</color>
+    <color name="colorBrown">#483b27</color>
+    <color name="colorDarkBrown">#261E10</color>
 </resources>
