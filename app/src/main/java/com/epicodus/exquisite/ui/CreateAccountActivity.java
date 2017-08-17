@@ -1,5 +1,6 @@
 package com.epicodus.exquisite.ui;
 
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.epicodus.exquisite.ConfirmDialogFragment;
 import com.epicodus.exquisite.Constants;
 import com.epicodus.exquisite.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -198,7 +200,11 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             }
         });
     }
+
     @Override
     public void onBackPressed() {
+        FragmentManager fm = getFragmentManager();
+        ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
+        confirmDialogFragment.show(fm, "Fragment");
     }
 }

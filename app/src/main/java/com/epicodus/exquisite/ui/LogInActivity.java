@@ -1,5 +1,6 @@
 package com.epicodus.exquisite.ui;
 
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.epicodus.exquisite.ConfirmDialogFragment;
 import com.epicodus.exquisite.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -115,6 +117,8 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-
+        FragmentManager fm = getFragmentManager();
+        ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
+        confirmDialogFragment.show(fm, "Fragment");
     }
 }

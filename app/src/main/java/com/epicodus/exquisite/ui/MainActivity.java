@@ -1,5 +1,6 @@
 package com.epicodus.exquisite.ui;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.epicodus.exquisite.ConfirmDialogFragment;
 import com.epicodus.exquisite.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -89,5 +91,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth.removeAuthStateListener(mAuthListener);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getFragmentManager();
+        ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
+        confirmDialogFragment.show(fm, "Fragment");
+    }
 }
